@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+  db:
+    image: mysql:5.6
+    volumes:
+      - ./dbdata:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${db_name}"
+      MYSQL_USER: "${db_user}"
+      MYSQL_PASSWORD: "${db_password}"
+              
+  web:
+    depends_on:
+      - db
+    build:
+      context: ./web5
+    image: mike/php5.6-debug
+    volumes:
+      - ./webdata:/var/www/html
+    ports:
+      - 8080:80
+    environment:
+      XDEBUG_CONFIG: remote_host=172.17.0.1 
